@@ -1,5 +1,5 @@
 //If you want to know how this algorithm works: http://www.ryanjuckett.com/programming/cyclic-coordinate-descent-in-2d/
-//Press 1, 2, 3, 4, 5 or 6 to see different IK skeletal structures
+//Press 1, 2, 3, 4, 5, 6 or 7 to see different IK skeletal structures
 int mode = 1;
 int sizeX = 640;
 int sizeY = 480;
@@ -17,12 +17,17 @@ ArrayList<Bone> boneList4 = new ArrayList<Bone>();
 ArrayList<Bone> boneListCat = new ArrayList<Bone>();
 ArrayList<Bone> boneListCat2 = new ArrayList<Bone>();
 ArrayList<Bone> boneListCat3 = new ArrayList<Bone>();
+ArrayList<Bone> boneListLongCat = new ArrayList<Bone>();
 
 PImage angryCat1;
 PImage angryCat2;
 PImage catPart1;
 PImage catPart2;
 PImage catPart3;
+
+PImage longCatHead;
+PImage longCatPart;
+PImage longCatEnd;
   
 void setup() {
   size(sizeX,sizeY); 
@@ -31,6 +36,10 @@ void setup() {
   catPart1 = loadImage("catpart1.png");
   catPart2 = loadImage("catpart2.png");
   catPart3 = loadImage("catpart3.png");
+  
+  longCatHead = loadImage("longCatHead.png");
+  longCatPart = loadImage("longCatPart.png");
+  longCatEnd = loadImage("longCatEnd.png");
   //boneList
   Bone firstBone = new Bone(null, 100, 30, new PVector(startX, startY));
   Bone secondBone = new Bone(firstBone, 80, 30, null);
@@ -111,6 +120,23 @@ void setup() {
   boneListCat3.add(firstBoneCat3);
   boneListCat3.add(secondBoneCat3);
   boneListCat3.add(thirdBoneCat3);
+  
+  int longCatOffsetX = -50;
+  int longCatOffsetY = 200;
+  //longcat
+  Bone firstBoneLongCat = new Bone(null, 110, 0, new PVector(longCatOffsetX, longCatOffsetY));
+  Bone secondBoneLongCat= new Bone(firstBoneLongCat, 100, 0, null);
+  Bone thirdBoneLongCat= new Bone(secondBoneLongCat, 100, 0, null);
+  Bone fourthBoneLongCat= new Bone(thirdBoneLongCat, 100, 0, null);
+  Bone fifthBoneLongCat= new Bone(fourthBoneLongCat, 100, 0, null);
+  Bone sixthBoneLongCat = new Bone(fifthBoneLongCat, 100, 0, null);
+   
+  boneListLongCat.add(firstBoneLongCat);
+  boneListLongCat.add(secondBoneLongCat);
+  boneListLongCat.add(thirdBoneLongCat);
+  boneListLongCat.add(fourthBoneLongCat);
+  boneListLongCat.add(fifthBoneLongCat);
+  boneListLongCat.add(sixthBoneLongCat);
 
 }
 
@@ -126,6 +152,7 @@ void draw() {
   CDC(boneListCat);
   CDC(boneListCat2);
   CDC(boneListCat3);
+  CDC(boneListLongCat);
   
   if (mode == 1 || mode == 5) {
     stroke(BLACK);
@@ -157,11 +184,13 @@ void draw() {
     
     image(angryCat1, 450 + randomModX, 0 + randomModY);
     image(angryCat2, 0 + randomModX, 0 + randomModY);
-    
-    
+     
     drawCat(boneListCat);
     drawCat(boneListCat2);
     drawCat(boneListCat3);
+  }
+  if (mode == 7) {
+    drawLongCat(boneListLongCat);
   }
   
 }
@@ -196,6 +225,36 @@ void drawCat(ArrayList<Bone> list) {
   image(catPart3, 0, -50);
   rotate(-part3.getRot());
   translate(-part3.getStartPos().x, -part3.getStartPos().y);
+}
+
+void drawLongCat(ArrayList<Bone> list) {
+    Bone partStart = list.get(0);
+    Bone partEnd = list.get(list.size() - 1);
+    
+    //part 1
+    translate(partStart.getStartPos().x, partStart.getStartPos().y);
+    rotate(partStart.getRot());
+    image(longCatEnd, 0, -50);
+    rotate(-partStart.getRot());
+    translate(-partStart.getStartPos().x, -partStart.getStartPos().y);
+    
+    //part 2
+    for (int index = 1; index < list.size() - 1; index++) {
+      Bone bonePiece = list.get(index);
+      translate(bonePiece.getStartPos().x, bonePiece.getStartPos().y);
+      rotate(bonePiece.getRot());
+      image(longCatPart, 0, -50);
+      rotate(-bonePiece.getRot());
+      translate(-bonePiece.getStartPos().x, -bonePiece.getStartPos().y);
+    } 
+
+    
+    //part 3
+    translate(partEnd.getStartPos().x, partEnd.getStartPos().y);
+    rotate(partEnd.getRot());
+    image(longCatHead, 0, -50);
+    rotate(-partEnd.getRot());
+    translate(-partEnd.getStartPos().x, -partEnd.getStartPos().y);
 }
 
 
@@ -286,6 +345,9 @@ void keyPressed() {
   }
   else if (key == '6'){
     mode = 6;
+  }
+  else if (key == '7'){
+    mode = 7;
   }
   
 }
