@@ -1,3 +1,4 @@
+//If you want to know how this algorithm works: http://www.ryanjuckett.com/programming/cyclic-coordinate-descent-in-2d/
 //Press 1, 2, 3, 4, 5 or 6 to see different IK skeletal structures
 int mode = 1;
 int sizeX = 640;
